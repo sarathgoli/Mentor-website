@@ -35,7 +35,7 @@ function Home() {
   }, []);
 
   const getPosts = (variables) => {
-    const url = "http://localhost:5005/posts";
+    const url = "https://mentor-gvpce.herokuapp.com/posts";
 
     Axios.post(url, variables, {
       headers: { "content-type": "application/json" },
@@ -90,8 +90,10 @@ function Home() {
 
   function deletepost(post_id) {
     console.log(post_id);
+    if(window.confirm("Do you want to delete this particular post"))
+    {
     Axios.post(
-      "http://localhost:5005/deletepost",
+      "https://mentor-gvpce.herokuapp.com/deletepost",
       { id: post_id },
       {
         headers: { "content-type": "application/json" },
@@ -99,13 +101,14 @@ function Home() {
       }
     ).then((response) => {
       console.log(response);
+      const variables = {
+        skip: 0,
+        limit: Limit
+      };
+      getPosts(variables);
     });
-    const variables = {
-      skip: Skip,
-      limit: Limit
-    };
-    getPosts(variables);
   }
+}
 
   return (
     <>

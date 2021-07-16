@@ -9,7 +9,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 var nodemailer = require('nodemailer');
 var cors = require('cors');
 var {Credential, Post, Company,Admin} =  require("./schemas/dbschemas");
-
+require("dotenv").config();
 mongoose.connect("mongodb+srv://prudvi:prudvi10@cluster0.izzyx.mongodb.net/mainproDB?retryWrites=true&w=majority", {useNewUrlParser:true, useUnifiedTopology:true, useFindAndModify: false});
 
 const app = express();
@@ -28,19 +28,24 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ["https://main--stoic-kalam-bfc287.netlify.app","https://mentor-gvpce.herokuapp.com","http://localhost:3000"],
     methods: ['GET','POST','OPTIONS','HEAD'],
     credentials: true,
     exposedHeaders: ['set-cookie']
 }));
 
+app.set('trust proxy',true);
 app.use(session({
     secret: "This secret key ",
     resave: false,
+    unset:'destroy',
     saveUninitialized: true,
     store: store,
     cookie: {
-        maxAge: 15 * 24 * 60 * 60 * 1000
+        httpOnly:true,
+        secure:true,
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+        sameSite:'none'
       }
   }));
 
@@ -190,7 +195,7 @@ app.post("/resetlinkroute", function(req, res){
                 from: "noreplyfrtesting@gmail.com",
                 to: req.body.user_mail.toLowerCase(),
                 subject: 'No-reply',
-                html: '<h1><a href= "http://localhost:3000/resetpswd">your link</a>Welcome</h1><p>That was easy!</p>'
+                html: '<h1><a href= "https://mentor-gvpce.herokuapp.com/resetpswd">your link</a>Welcome</h1><p>That was easy!</p>'
               }
 
               Credential.findOneAndUpdate({email: req.body.user_mail.toLowerCase()},{ $set: {reset: true}},{new: true} , (err, doc) => {
@@ -214,16 +219,17 @@ app.post("/resetlinkroute", function(req, res){
 });
 
 app.get("/resetpswd", function(req,res){
-    if(!req.session.count){
-        req.session.count = 0
-    }
-    req.session.count += 1;
-    if(req.session.count === 1){
-        res.render("resetpassword");
-    }
-    else{
-            res.send("<h1>Link expeired</h1>");
-    }
+    // if(!req.session.count){
+    //     req.session.count = 0
+    // }
+    // req.session.count += 1;
+    // if(req.session.count === 1){
+    //     res.render("resetpassword");
+    // }
+    // else{
+    //         res.send("<h1>Link expired</h1>");
+    // }
+    res.render("resetpassword");
 });
 
 app.post("/resetpswd", function(req, res){
@@ -232,6 +238,8 @@ app.post("/resetpswd", function(req, res){
             res.send("<h1>Give correct mail</h1>");
         }
         else if(result.reset){
+            if(req.body.new_pswd===req.body.re_new_pswd)
+            {
             console.log(req.body);
             var hashed_password = bcrypt.hashSync(req.body.new_pswd, 8);
             Credential.findOneAndUpdate({email: req.body.user_mail.toLowerCase()},{ $set: {password: hashed_password, reset:false}},{new: true} , (err, doc) => {
@@ -244,8 +252,13 @@ app.post("/resetpswd", function(req, res){
             });
             res.send("<h1>Password Updated</h1>");
         }
+        else
+        {
+            res.send("<h1>Passwords doesn't match.Check your new password!!</h1>")
+        }
+        }
         else{
-            res.send("<h1>You've already reset the password,, if forgot goto login page and click forgot password /h1>")
+            res.send("<h1>You've already reset the password,, if forgot goto login page and click forgot password </h1>")
         }
     });
 
@@ -402,7 +415,9 @@ app.post("/deletepost", function(req,res){
   res.send({isdone:true});
 });
 
-app.listen(5005, function(){
+app.listen(process.env.PORT||5005, function(){
     console.log("server started successfully🤩");
 })
+
+
 

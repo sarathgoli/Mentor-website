@@ -70,7 +70,7 @@ export default function Writeblog(props) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5005/companies", {
+      .get("https://mentor-gvpce.herokuapp.com/companies", {
         headers: {
           "content-type": "application/json"
         },
@@ -124,7 +124,7 @@ export default function Writeblog(props) {
         console.log(new_blog);
 
         axios
-          .post("http://localhost:5005/testingreact", new_blog, {
+          .post("https://mentor-gvpce.herokuapp.com/testingreact", new_blog, {
             headers: {
               "content-type": "application/json"
             },
@@ -155,19 +155,11 @@ export default function Writeblog(props) {
   return (
     <div className={classes.root}>
       <form>
-        <Container maxWidth="md">
-          <Grid container spacing={2} alignItems="center" justify="center">
-            <Grid item>
-              <Typography
-                style={{ padding: "0px", margin: "0px 0px" }}
-                variant="h1"
-                color="primary"
-              >
-                Write your blogs here
-              </Typography>
-            </Grid>
-            <Grid item spacing={3} direction="column" xs={4}>
-              <Typography color="primary">Select These Options</Typography>
+        <Container maxWidth="sm">
+        <h2 style={{display:"flex",justifyContent:"flex-start",color:"blueviolet"}}>Write your content</h2>
+        <br/>
+          <Grid container spacing={2} alignItems="flex-start" justifyContent="flex-start" direction="column">
+            <Grid item xs={12} style={{color:"blueviolet"}}>Select these options</Grid>
               <Grid item xs style={{ margin: "16px 0px" }}>
                 <TextField
                   name="title"
@@ -178,8 +170,8 @@ export default function Writeblog(props) {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs style={{ margin: "16px 0px" }}>
-                <label> select company name </label>
+              <Grid item xs={12} style={{ margin: "16px 0px" }}>
+                <label style={{color:"blueviolet"}}> select company name </label>
                 <select
                   name="c_name"
                   value={new_blog.c_name}
@@ -197,8 +189,8 @@ export default function Writeblog(props) {
                   ))}
                 </select>
               </Grid>
-              <Grid item xs style={{ marginBottom: "16px" }}>
-                <label> select role </label>
+              <Grid item xs={12} style={{ marginBottom: "16px" }}>
+                <label style={{color:"blueviolet"}}> select role </label>
                 <select
                   name="c_role"
                   value={new_blog.c_role}
@@ -217,8 +209,8 @@ export default function Writeblog(props) {
                     ))}
                 </select>
               </Grid>
-              <Grid items xs style={{ marginBottom: "16px" }}>
-                <label> select branch </label>
+              <Grid item xs={12} style={{ marginBottom: "16px" }}>
+                <label style={{color:"blueviolet"}}> select branch </label>
                 <select
                   name="branch"
                   value={new_blog.branch}
@@ -236,17 +228,18 @@ export default function Writeblog(props) {
                   ))}
                 </select>
               </Grid>
-            </Grid>
-            <Grid item xs={8}>
-              <Typography color="primary">Write Your Experience</Typography>
+              <Grid item xs={12} style={{marginBottom:"16px"}}>
+                
+              <p style={{color:"blueviolet"}}>Write Your Experience Below....</p>
               <QuillEditor
                 placeholder={"Start posting something"}
                 onEditorChange={onEditorChange}
-                onFilesChange={onFilesChange}
+                onFilesChange={onFilesChange} 
               />
+              </Grid>
             </Grid>
-            <Grid>
-              <Grid item>
+
+              <div style={{display:"flex",justifyContent:"flex-start",alignItems:"flex-start",marginTop:"30px"}}>
                 <Button
                 style={{backgroundColor:"#fcca03",color:"blue"}}
                   type="submit"
@@ -258,9 +251,7 @@ export default function Writeblog(props) {
                 >
                   Post
                 </Button>
-              </Grid>
-            </Grid>
-          </Grid>
+            </div>
         </Container>
       </form>
     </div>

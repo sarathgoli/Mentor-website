@@ -36,7 +36,7 @@ export const NavLink1=styled(Link)`
     display:flex;
     font-size:1.0rem;
     align-items:center;
-    padding:0 5rem;
+    padding:0 1rem;
     cursor:pointer;
 
     &.active
@@ -47,7 +47,7 @@ export const NavLink1=styled(Link)`
 
 export const Bars=styled(FaBars)`
     display:none;
-    color:#fff;
+    color:#fcca03;
 
     @media screen and (max-width:768px)
     {

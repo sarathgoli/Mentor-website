@@ -57,7 +57,7 @@ function Filter1(props)
       const [role,setRole]=useState([])
       useEffect(() => {
         axios
-          .get("http://localhost:5005/companies", {
+          .get("https://mentor-gvpce.herokuapp.com/companies", {
             headers: {
               "content-type": "application/json"
             },
@@ -94,7 +94,7 @@ function Filter1(props)
           <Grid container spacing={1}>
           {role.map((value,index)=>(
                   <React.Fragment>
-                  <Grid item xs={6} sm={3}>
+                  <Grid item xs={12} md={3} sm={4}>
           <GreenCheckbox checked={Checked1.indexOf(value.name)===-1?false:true} onChange={()=>handleChange1(value.name)} name="checkedG"/>
           <span style={{color:"#a32173"}}>{value.name}</span>
             </Grid>

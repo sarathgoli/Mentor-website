@@ -49,30 +49,7 @@ export default function Login() {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5005/", {
-        headers: {
-          "content-type": "application/json"
-        },
-        withCredentials: true
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.isloggedin) {
-          dispatch(
-            login_redux({
-              user_name: res.data.name,
-              user_id: res.data.user_id,
-              isauthenticated: true,
-              isadmin: res.data.isadmin
-            })
-          );
-
-          history.push("/home");
-        }
-      });
-  }, []);
+ 
 
   const classes = useStyles();
 
@@ -105,7 +82,7 @@ export default function Login() {
       setOpen(true);
     } else {
       axios
-        .post("http://localhost:5005/", login, {
+        .post("https://mentor-gvpce.herokuapp.com/", login, {
           headers: {
             "content-type": "application/json"
           },
@@ -139,7 +116,7 @@ export default function Login() {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign in
+          Login
         </Typography>
         <form className={classes.form}>
           <TextField
